@@ -6,28 +6,14 @@ import lombok.Getter;
 @Getter
 public class GenericException extends Exception {
 
-    public final static StatusDTO GENERIC_ERROR = new StatusDTO();
-
-    static {
-        GENERIC_ERROR.setCode(500);
-        GENERIC_ERROR.setMessage("Generic error");
-    }
-
     private final StatusDTO status;
 
-    public GenericException(StatusDTO status) {
-        this.status = status;
+    public GenericException() {
+        this.status = StatusDTO.builder()
+                .code(500)
+                .message("Generic error")
+                .traceId(null)
+                .build();
     }
 
-    public GenericException(int code, String message) {
-        this.status = createStatus(code, message);
-    }
-
-    private StatusDTO createStatus(int code, String message) {
-        StatusDTO status = new StatusDTO();
-        status.setCode(code);
-        status.setMessage(message);
-        status.setTraceId(java.util.UUID.randomUUID().toString());
-        return status;
-    }
 }

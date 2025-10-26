@@ -1,14 +1,12 @@
 package it.sara.demo.service.assembler;
 
-import it.sara.demo.dto.UserDTO;
 import it.sara.demo.service.database.model.User;
+import it.sara.demo.service.user.criteria.CriteriaAddUser;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface UserAssembler {
+public interface CriteriaAddUserAssembler {
 
-    UserDTO toDTO(User user);
-
-    User toEntity(UserDTO userDTO);
+    User toUser(CriteriaAddUser criteria);
 
 }

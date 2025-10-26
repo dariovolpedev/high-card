@@ -1,10 +1,7 @@
 package it.sara.demo.service.user.result;
 
 import it.sara.demo.service.result.GenericResult;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-public class AddUserResult extends GenericResult {
+public record AddUserResult(String userId) implements GenericResult {
 }

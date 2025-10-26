@@ -1,72 +1,62 @@
 package it.sara.demo.service.user.impl;
 
+import it.sara.demo.dto.UserDTO;
+import it.sara.demo.exception.DatabaseOperationException;
 import it.sara.demo.exception.GenericException;
+import it.sara.demo.service.assembler.CriteriaAddUserAssembler;
 import it.sara.demo.service.database.UserRepository;
 import it.sara.demo.service.database.model.User;
+import it.sara.demo.service.result.PagedResult;
 import it.sara.demo.service.user.UserService;
 import it.sara.demo.service.user.criteria.CriteriaAddUser;
 import it.sara.demo.service.user.criteria.CriteriaGetUsers;
 import it.sara.demo.service.user.result.AddUserResult;
-import it.sara.demo.service.user.result.GetUsersResult;
-import it.sara.demo.service.util.StringUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private StringUtil stringUtil;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final CriteriaAddUserAssembler criteriaAddUserAssembler;
 
     @Override
-    public AddUserResult addUser(CriteriaAddUser criteria) throws GenericException {
+    public AddUserResult addUser(CriteriaAddUser criteria) throws Exception {
 
         AddUserResult returnValue;
         User user;
 
         try {
-
-            returnValue = new AddUserResult();
-
-            if (stringUtil.isNullOrEmpty(criteria.getFirstName())) {
-                throw new GenericException(400, "First name is required");
+            user = criteriaAddUserAssembler.toUser(criteria);
+            /*
+            simulo in parte una chiamata al metodo save di JPA
+            che ritorna l'oggetto salvato
+            in questo caso, mi basta lo user id
+             */
+            String userId = userRepository.save(user);
+            if (userId == null) {
+                throw new DatabaseOperationException("Error saving user");
             }
-            if (stringUtil.isNullOrEmpty(criteria.getLastName())) {
-                throw new GenericException(400, "Last name is required");
+            returnValue = new AddUserResult(userId);
+        } catch (DatabaseOperationException e) {
+            if (log.isErrorEnabled()) {
+                log.error(e.getMessage(), e);
             }
-            if (stringUtil.isNullOrEmpty(criteria.getEmail())) {
-                throw new GenericException(400, "Email is required");
-            }
-            if (stringUtil.isNullOrEmpty(criteria.getPhoneNumber())) {
-                throw new GenericException(400, "Phone is required");
-            }
-
-            user = new User();
-            user.setFirstName(criteria.getFirstName());
-            user.setLastName(criteria.getLastName());
-            user.setEmail(criteria.getEmail());
-            user.setPhoneNumber(criteria.getPhoneNumber());
-
-            if (!userRepository.save(user)) {
-                throw new GenericException(500, "Error saving user");
-            }
-
+            throw new DatabaseOperationException();
         } catch (Exception e) {
             if (log.isErrorEnabled()) {
                 log.error(e.getMessage(), e);
             }
-            throw new GenericException(GenericException.GENERIC_ERROR);
+            throw new GenericException();
         }
         return returnValue;
     }
 
     @Override
-    public GetUsersResult getUsers(CriteriaGetUsers criteriaGetUsers) throws GenericException {
+    public PagedResult<UserDTO> getUsers(CriteriaGetUsers criteriaGetUsers) throws Exception {
         return null;
     }
 }

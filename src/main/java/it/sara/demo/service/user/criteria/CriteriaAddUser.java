@@ -1,14 +1,11 @@
 package it.sara.demo.service.user.criteria;
 
 import it.sara.demo.service.criteria.GenericCriteria;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
-public class CriteriaAddUser extends GenericCriteria {
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phoneNumber;
+public record CriteriaAddUser(
+        String firstName,
+        String lastName,
+        String email,
+        String phoneNumber)
+        implements GenericCriteria {
 }

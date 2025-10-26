@@ -2,17 +2,11 @@ package it.sara.demo.web.assembler;
 
 import it.sara.demo.service.user.criteria.CriteriaAddUser;
 import it.sara.demo.web.user.request.AddUserRequest;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
 
-@Component
-public class AddUserAssembler {
+@Mapper(componentModel = "spring")
+public interface AddUserAssembler {
 
-    public CriteriaAddUser toCriteria(AddUserRequest addUserRequest) {
-        CriteriaAddUser returnValue = new CriteriaAddUser();
-        returnValue.setEmail(addUserRequest.getEmail());
-        returnValue.setFirstName(addUserRequest.getFirstName());
-        returnValue.setLastName(addUserRequest.getFirstName());
-        returnValue.setPhoneNumber(addUserRequest.getPhoneNumber());
-        return returnValue;
-    }
+    CriteriaAddUser toCriteria(AddUserRequest addUserRequest);
+
 }

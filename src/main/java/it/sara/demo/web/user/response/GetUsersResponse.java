@@ -1,14 +1,14 @@
 package it.sara.demo.web.user.response;
 
-import it.sara.demo.dto.UserDTO;
-import it.sara.demo.web.response.GenericPagedResponse;
+import it.sara.demo.web.response.PagedResponse;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-public class GetUsersResponse extends GenericPagedResponse {
-    private List<UserDTO> users;
+@SuperBuilder
+public class GetUsersResponse extends PagedResponse<UserResponse> {
 }
