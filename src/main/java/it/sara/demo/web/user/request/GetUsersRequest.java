@@ -2,6 +2,7 @@ package it.sara.demo.web.user.request;
 
 import it.sara.demo.web.request.GenericRequest;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
@@ -19,8 +20,12 @@ public record GetUsersRequest(
         Integer page,
         @NotNull(message = "Page size is required")
         Integer size,
-        @NotNull(message = "SortBy is required")
+        @NotEmpty(message = "SortBy is required")
         String sortBy,
+        @Pattern(
+                regexp = "(?i)^(asc|desc)$",
+                message = "Sort direction must be 'asc' or 'desc'"
+        )
         String sortDirection
 ) implements GenericRequest {
 
