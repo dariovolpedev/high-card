@@ -12,10 +12,10 @@ import it.sara.demo.service.user.criteria.CriteriaAddUser;
 import it.sara.demo.service.user.criteria.CriteriaGetUsers;
 import it.sara.demo.service.user.result.AddUserResult;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-@Slf4j
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -58,6 +58,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public PagedResult<UserDTO> getUsers(CriteriaGetUsers criteriaGetUsers) throws Exception {
         PagedResult<User> users = userRepository.findUsersByFilters(criteriaGetUsers);
-        return criteriaAddUserAssembler.toPadegUserDTO(users);
+        return criteriaAddUserAssembler.toPagedUserDTO(users);
     }
 }

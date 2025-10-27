@@ -4,14 +4,14 @@ import it.sara.demo.service.database.model.User;
 import it.sara.demo.service.result.PagedResult;
 import it.sara.demo.service.user.criteria.CriteriaGetUsers;
 import it.sara.demo.service.util.StringUtil;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Slf4j
+@Log4j2
 @Repository
 public class UserRepository {
 
@@ -40,7 +40,6 @@ public class UserRepository {
                 .toList();
 
 
-
         // 3) paginazione
         int requestedPage = Math.max(1, c.page());
         int size = Math.max(1, c.size());
@@ -56,9 +55,9 @@ public class UserRepository {
         int zeroBasedPage = requestedPage - 1;
 
         long fromL = Math.min((long) zeroBasedPage * size, totalElements);
-        long toL   = Math.min(fromL + size, totalElements);
+        long toL = Math.min(fromL + size, totalElements);
         int from = Math.toIntExact(fromL);
-        int to   = Math.toIntExact(toL);
+        int to = Math.toIntExact(toL);
         List<User> items = sorted.subList(from, to);
 
         // 5) log di una pseudo-query
