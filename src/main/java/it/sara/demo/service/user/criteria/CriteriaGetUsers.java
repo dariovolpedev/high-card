@@ -4,9 +4,6 @@ import it.sara.demo.service.criteria.GenericCriteria;
 import lombok.Getter;
 import org.springframework.data.domain.Sort;
 
-import java.util.Locale;
-import java.util.Map;
-
 public record CriteriaGetUsers(
         String firstName,
         String lastName,

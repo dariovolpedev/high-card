@@ -6,7 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@SuperBuilder(builderMethodName = "genericResponseBuilder")
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString

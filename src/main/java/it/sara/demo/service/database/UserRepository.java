@@ -1,6 +1,7 @@
 package it.sara.demo.service.database;
 
 import it.sara.demo.service.database.model.User;
+import it.sara.demo.service.result.PagedResult;
 import it.sara.demo.service.user.criteria.CriteriaGetUsers;
 import it.sara.demo.service.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +30,8 @@ public class UserRepository {
         return FakeDatabase.TABLE_USER;
     }
 
-    public List<User> findUsersByFilters(CriteriaGetUsers c) {
-        // filtro
+    public PagedResult<User> findUsersByFilters(CriteriaGetUsers c) {
+        // 1) filtro
         List<User> filtered = FakeDatabase.TABLE_USER.stream()
                 .filter(u -> StringUtil.isNullOrEmpty(c.firstName()) || StringUtil.containsIgnoreCase(u.getFirstName(), c.firstName()))
                 .filter(u -> StringUtil.isNullOrEmpty(c.lastName()) || StringUtil.containsIgnoreCase(u.getLastName(), c.lastName()))
@@ -38,22 +39,35 @@ public class UserRepository {
                 .filter(u -> StringUtil.isNullOrEmpty(c.phoneNumber()) || Objects.equals(u.getPhoneNumber(), c.phoneNumber()))
                 .toList();
 
-        // paginazione
-        int page = Math.max(0, c.page());
+
+
+        // 3) paginazione
+        int requestedPage = Math.max(1, c.page());
         int size = Math.max(1, c.size());
-        int from = Math.min(page * size, filtered.size());
-        int to = Math.min(from + size, filtered.size());
-        List<User> result = filtered.subList(from, to);
 
-        // ordinamento
+        // 2) ordinamento
         Comparator<User> comparator = getUserComparator(c);
-        result.sort(comparator);
+        List<User> sorted = new ArrayList<>(filtered);
+        sorted.sort(comparator);
 
-        //log di una pseudo-query
+        long totalElements = sorted.size();
+        int totalPages = (totalElements == 0) ? 0 : (int) ((totalElements + size - 1) / size); // ceil
+
+        int zeroBasedPage = requestedPage - 1;
+
+        long fromL = Math.min((long) zeroBasedPage * size, totalElements);
+        long toL   = Math.min(fromL + size, totalElements);
+        int from = Math.toIntExact(fromL);
+        int to   = Math.toIntExact(toL);
+        List<User> items = sorted.subList(from, to);
+
+        // 5) log di una pseudo-query
         logQuery(c);
 
-        return result;
+        // 6) ritorno arricchito
+        return new PagedResult<>(items, requestedPage, size, totalElements, totalPages);
     }
+
 
     private Comparator<User> getUserComparator(CriteriaGetUsers c) {
         Comparator<User> comparator = switch (c.order().getField()) {

@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PagedResult<UserDTO> getUsers(CriteriaGetUsers criteriaGetUsers) throws Exception {
-        return null;
+        PagedResult<User> users = userRepository.findUsersByFilters(criteriaGetUsers);
+        return criteriaAddUserAssembler.toPadegUserDTO(users);
     }
 }
