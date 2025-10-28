@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/v1")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -28,14 +28,14 @@ public class UserController {
     private final GetUsersAssembler getUsersAssembler;
     private final PagedResultAssembler pagedResultAssembler;
 
-    @PutMapping("/v1/add")
+    @PutMapping("/add")
     public ResponseEntity<AddUserResponse> addUser(@RequestBody @Valid AddUserRequest request) throws Exception {
         CriteriaAddUser addUserCriteria = addUserAssembler.toCriteria(request);
         AddUserResult result = userService.addUser(addUserCriteria);
         return ResponseEntity.ok(AddUserResponse.success(result.userId()));
     }
 
-    @PostMapping("/v1/list")
+    @PostMapping("/users")
     public ResponseEntity<GetUsersResponse> getUsers(@RequestBody @Valid GetUsersRequest request) throws Exception {
         CriteriaGetUsers getUsersCriteria = getUsersAssembler.toCriteria(request);
         PagedResult<UserDTO> result = userService.getUsers(getUsersCriteria);

@@ -2,7 +2,6 @@ package it.sara.demo.service.user.criteria;
 
 import it.sara.demo.service.criteria.GenericCriteria;
 import lombok.Getter;
-import org.springframework.data.domain.Sort;
 
 public record CriteriaGetUsers(
         String firstName,
@@ -13,31 +12,6 @@ public record CriteriaGetUsers(
         int size,
         OrderType order
 ) implements GenericCriteria {
-
-    public CriteriaGetUsers(
-            String firstName,
-            String lastName,
-            String email,
-            String phoneNumber,
-            int page,
-            int size,
-            String sortBy,
-            String sortDirection
-    ) {
-        this(
-                firstName,
-                lastName,
-                email,
-                phoneNumber,
-                page,
-                size,
-                OrderType.of(sortBy, sortDirection)
-        );
-    }
-
-    public Sort toSort() {
-        return Sort.by(order.isDescending() ? Sort.Direction.DESC : Sort.Direction.ASC);
-    }
 
     @Getter
     public enum OrderType {

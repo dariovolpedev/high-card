@@ -1,5 +1,6 @@
 package it.sara.demo.web.user.request;
 
+import it.sara.demo.web.component.NoSqlInjection;
 import it.sara.demo.web.request.GenericRequest;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -7,8 +8,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record GetUsersRequest(
+        @NoSqlInjection
         String firstName,
+        @NoSqlInjection
         String lastName,
+        @NoSqlInjection
         @Email(message = "Email is invalid")
         String email,
         @Pattern(
@@ -21,6 +25,7 @@ public record GetUsersRequest(
         @NotNull(message = "Page size is required")
         Integer size,
         @NotEmpty(message = "SortBy is required")
+        @NoSqlInjection
         String sortBy,
         @Pattern(
                 regexp = "(?i)^(asc|desc)$",
