@@ -1,0 +1,18 @@
+http://localhost:8080/sara/demo/user/v1/users - POST
+
+{
+  "page": 1,
+  "size": 20,
+  "firstName": "Mario",
+  "sortBy": "firstName",
+  "sortDirection": "ASC"
+}
+
+http://localhost:8080/sara/demo/user/v1/add - PUT
+
+{
+  "firstName": "Mario",
+  "lastName": "Rossi",
+  "email": "mario.rossi@example.com",
+  "phoneNumber": "+39 3331234587"
+}
